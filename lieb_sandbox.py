@@ -63,6 +63,47 @@ def build_lattice(n, a):
     return nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def build_lattice2(n, a):
+    # lat_atoms = np.array([(0,0),(0,a), (a,0)])
+    # ^ Cannot do this. Only A and C can be reached this way.
+    # In for loop:
+    #   lat_atoms1 = [x+i*v1 for x in lat_atoms]
+    #   lat_atoms2 = [x+i*v2 for x in lat_atoms]
+    # does not generate the Lieb lattice.
+    lat_atoms = np.array([[0,0],[0,a], [a,0]])
+    lat_B  = np.array([(0,0)])
+    nodes = []
+    cells = []
+    for i in range(-n/2,(n/2)+1,1): 
+        # 'Diagonal' elements: 
+        lat_atoms1 = [x+i*v1 for x in lat_atoms]
+        lat_atoms2 = [x+i*v2 for x in lat_atoms]
+        lat_atomsR1 = [x+i*Rv1 for x in lat_atoms]
+        lat_atomsR2 = [x+i*Rv2 for x in lat_atoms]
+        # Other combs:
+        #lat_atoms3 = [x+i*v1+i*v2 for x in lat_atoms] << unecessary
+        lat_atoms4 = [x+i*v1-i*v2 for x in lat_atoms]
+        #lat_atoms5 = [x-i*v1+i*v2 for x in lat_atoms] << unecessary
+        lat_atoms6 = [x-i*v1-i*v2 for x in lat_atoms]
+
+
+        #at_atoms3 = [x+i*v1+i*v2 for x in lat_B]
+        nodes.extend(lat_atoms1)
+        nodes.extend(lat_atoms2)
+        #nodes.extend(lat_atoms3)
+        nodes.extend(lat_atoms4)
+        #nodes.extend(lat_atoms5)
+        nodes.extend(lat_atoms6)
+        nodes.extend(lat_atomsR1)
+        nodes.extend(lat_atomsR2)
+        #nodes.extend(lat_atoms3)
+    return nodes
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # Generate lattice.   
 nodes = build_lattice(num_cells, a)
 # Store x- and y-coordinates separately.
